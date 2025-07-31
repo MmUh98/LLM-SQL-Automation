@@ -1,28 +1,8 @@
-# Core FastAPI app
-fastapi
-uvicorn
-
-# LangChain and LLMs
-langchain
-langchain-openai
-langchain-community
-langchain-core
-
-# Azure OpenAI
-openai>=1.0.0
-python-dotenv
-
-# Database
-sqlalchemy
-pyodbc
-
-# Pydantic for schemas
-pydantic
-
-# Optional: For testing and HTTP requests
-httpx
-requests
-
-# Optional: For local development
-python-dotenv
+langchain_community>=0.0.30
+langchain-openai>=0.1.7
+sqlalchemy>=2.0.0
+pyodbc>=4.0.39
+python-dotenv>=1.0.0
+fastapi>=0.110.0
+uvicorn>=0.29.0
 

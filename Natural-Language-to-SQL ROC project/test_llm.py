@@ -1,6 +1,10 @@
 import os
-from langchain_openai import AzureChatOpenAI
 from dotenv import load_dotenv
+from langchain_community.utilities import SQLDatabase
+from langchain_openai import AzureChatOpenAI
+from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
+from langchain_community.agent_toolkits.sql.base import create_sql_agent
+from app.db import get_database
 
 load_dotenv()
 
@@ -15,8 +19,19 @@ llm = AzureChatOpenAI(
 )
 
 try:
-    response = llm.invoke("Hello, who are you?")
-    print("LLM response:", response)
+    print("Testing DB connection...")
+    db_engine = get_database()
+    db = SQLDatabase.from_uri(str(db_engine.url))
+    print("Tables in DB:", db.get_usable_table_names())
+    toolkit = SQLDatabaseToolkit(db=db, llm=llm)
+    agent_executor = create_sql_agent(
+        llm=llm,
+        toolkit=toolkit,
+        verbose=True
+    )
+    print("LLM and DB connection successful!")
+    # Optionally, test a simple query
+    result = agent_executor.invoke({"input": "List all tables in the database"})
+    print("Agent output:", result)
 except Exception as e:
-    print("LLM connection failed:", e)
-
+    print("LLM or DB connection failed:", e)
